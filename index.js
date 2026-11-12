@@ -19,12 +19,28 @@ const player_shapebox = document.getElementById("player_shapebox");
 const cpu_shapebox = document.getElementById("cpu_shapebox");
 const grid = document.getElementById("grid");
 const game_display = document.getElementById("game_display");
+const grid_boxes = document.querySelectorAll(".grid_box");
+
+const turn_display = document.getElementById("turn_display");
+
 
 
 // [ Variables ] : ( Game-Start )
 const shapes = ['O', "X"];
 let player_username, player_shape, cpu_shape;
 let game_count = 0;
+let player_turn, cpu_turn;
+
+
+// [ Variables ] : Grid ( 3x3 ) 
+let box_count = 9;
+let space_count = 9;
+let marked_count = 0;
+let grid_full = false;
+let reference_list = ['', '', '', '', '', '', '', '', ''];
+let cpu_boxes = [];
+
+
 
 
 
@@ -32,7 +48,7 @@ let game_count = 0;
 start_button.addEventListener("click", () => {
     game_count++;
     mode_select.style.display = "none";
-    set_username.style.display = "block";
+    set_username.style.display = "block"; 
 })
 continue_button.addEventListener("click", () => {
     player_username = username.value;
@@ -42,7 +58,6 @@ continue_button.addEventListener("click", () => {
     player_username_display.innerHTML = player_username;
 })
 circle_option.addEventListener("click", () => {
-    // player_shape = circle_option.innerHTML;
     player_shape = shapes[0];
     cpu_shape = shapes[1];
     start_menu.style.display = "none";
@@ -55,7 +70,6 @@ circle_option.addEventListener("click", () => {
 
 })
 cross_option.addEventListener("click", () => {
-    // player_shape = cross_option.innerHTML;
     player_shape = shapes[1];
     cpu_shape = shapes[0];
     start_menu.style.display = "none";
@@ -66,6 +80,72 @@ cross_option.addEventListener("click", () => {
 
     console.log(`Player Shape : ${player_shape}`);
 })
+
+// [ System ] : ( Game Board EventListeners )
+grid_boxes.forEach((grid_box) => {
+    grid_box.addEventListener("click", () => {
+        if(space_count > 0){
+            grid_box.innerHTML = player_shape;
+            reference_list[grid_box.id] = player_shape;
+            space_count--;
+            cpuAttempt();
+
+            // Debug
+            console.log(`reference_list : ${reference_list}`);
+            console.log(`${grid_box.id}`);
+            console.log(`space_count : ${space_count}`);
+        }
+    })
+})
+
+
+// [ Functions ] : ( Grid ) 
+function cpuAttempt(){
+    // Random Number Generator
+    //      - random num [0 - 8]
+    //      - tracker list (attempts) : prevents repeat numbers
+    //      - tracker list (player attempts) : prevents overwrites
+
+    // [ Condition ] : Duplicate
+    let cpu_attempt = Math.floor(Math.random() * 9);
+
+    if(reference_list[cpu_attempt] !== '' && space_count > 0){
+        cpuAttempt();
+    } else if (reference_list[cpu_attempt] === '' && space_count > 0){
+        reference_list[cpu_attempt] = cpu_shape;
+        cpu_boxes.push(cpu_attempt);
+        space_count--;
+
+        // [ Update Grid ]
+        grid_boxes[cpu_attempt].innerHTML = cpu_shape;
+    } else {
+        return;     // Exit Function
+    }
+    // reference_list[cpu_attempt] = cpu_shape;
+
+    // // Grid Scan
+    // for(let i = 0; i < reference_list.length; i++){
+    //     if(cpu_attempt === i){
+    //         cpu_attempt = Math.floor(Math.random() * 9);
+    //     }
+    // }
+
+
+    
+    // [ Debug ]
+    console.log(`cpu attempts : ${cpu_boxes}`);
+
+
+}
+function gridCheck(){
+    if(space_count === 0){
+        grid_boxes.forEach((grid_box) => {
+            grid_box.disabled = true;
+        })
+    }
+}
+
+
 
 /**
  *     [ Objects ] : System
