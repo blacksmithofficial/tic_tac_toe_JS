@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Game Menu -->
+     <div id="start_menu">
+        <h1>Tic Tac Toe</h1>
+
+        <div id="mode_select">
+            <button id="start_button">Start Game</button>
+        </div>
+
+        <div id="set_username" style="display: none;">
+            <label for="">Enter Username</label><br>
+            <input id="username" type="text" placeholder="abc123"><br><br>
+            <button id="continue_button">Continue</button>
+        </div>
+
+        <div id="shape_select" style="display: none;">
+            <label for="">Select Shape</label><br><br>
+            <div display="flex">
+                <button id="circle_option">O</button>
+                <button id="cross_option">X</button>
+            </div>
+        </div>
+        <p>Developed By : Blacksmith</p>
+     </div>
+
+    <!-- Game Board -->
+     <div id="game_board" style="display: none;">
+        <h1>Tic Tac Toe</h1>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <!-- Player Display -->
+            <div id="player_display">
+                <h4 id="player_username_display">Player 1</h4>
+                <div class="tally_box"></div>
+                <label for="wins">Wins</label>
+                <div id="player_shapebox" class="shape_indicator"></div>
+            </div>
+            <!-- 3x3 Grid -->
+            <div id="grid">
+                <div id="0" class="grid_box"></div>
+                <div id="1" class="grid_box"></div>
+                <div id="2" class="grid_box"></div>
+                <div id="3" class="grid_box"></div>
+                <div id="4" class="grid_box"></div>
+                <div id="5" class="grid_box"></div>
+                <div id="6" class="grid_box"></div>
+                <div id="7" class="grid_box"></div>
+                <div id="8" class="grid_box"></div>
+            </div>
+            <!-- CPU Display -->
+            <div id="cpu_display">
+                <h4>CPU</h4>
+                <div class="tally_box"></div>
+                <label for="wins">wins</label>
+                <div id="cpu_shapebox" class="shape_indicator"></div>
+            </div>
+        </div>
+        <h1 id="game_display"></h1>
+     </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
