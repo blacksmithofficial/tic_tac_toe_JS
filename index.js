@@ -98,91 +98,8 @@ function cpuAttempt(){
     } else {
         return;     // Exit Function
     }
-
-    // [ Debug ]
-    // console.log(`cpu attempts : ${cpu_boxes}`);
-    // console.log(`player attempts : ${player_boxes}`);
 }
 function streakCheck(){
-    // // [ Arrays ] : Strings (Sequences) 3!       [ FIRST IMPLEMENTATION ]
-    // rows = ["012","021","102","120","210","201", 
-    //         "345","354","435","453","534","543", 
-    //         "678","687","768","786","867","876"];
-    // columns = ["036","063","306","360","603","630",
-    //             "147","174","417","471","714","741",
-    //             "258","285","528","582","825","852"];
-    // diagonals = ["048","084","408","480","804","840",
-    //              "246","264","426","462","624","642"];
-
-    // // [ Arrays ] : Convert
-    // let subArrayA = arrayA.toString().split(",");
-    // let subArrayB = arrayB.toString().split(",");
-
-    // let allocatorA = "";
-    // let allocatorB = "";
-    // let cross_count = 0;
-    // let circle_count = 0;
-
-    // // [ Loop ] : Allocate subArrays
-    // for(let i = 0; i < subArrayA.length; i++){
-    //     allocatorA += subArrayA[i];
-    // }
-    // for(let i = 0; i < subArrayB.length; i++){
-    //     allocatorB += subArrayB[i];
-    // }
-
-    // // [ Loop ] : Rows
-    // for(let i = 0; i < rows.length; i++){
-    //     if(allocatorA.includes(rows[i])){
-    //         // window.alert("STREAK DETECTED");
-    //         console.log("STREAK DETECTED");
-
-    //         endgame_display.style.display = "flex";
-    //         endgame_display.innerHTML = "GAME OVER";
-    //     }
-    //     if(allocatorB.includes(rows[i])){
-    //         // window.alert("STREAK DETECTED");
-    //         console.log("STREAK DETECTED");
-
-    //         endgame_display.style.display = "flex";
-    //         endgame_display.innerHTML = "GAME OVER";
-    //     }        
-    // }
-    // // [ Loop ] : Columns
-    // for(let i = 0; i < columns.length; i++){
-    //     if(allocatorA.includes(columns[i])){
-    //         // window.alert("STREAK DETECTED");
-    //         console.log("Player Victory");
-
-    //         endgame_display.style.display = "flex";
-    //         endgame_display.innerHTML = "GAME OVER";
-    //     }
-    //     if(allocatorB.includes(rows[i])){
-    //         // window.alert("STREAK DETECTED");
-    //         console.log("CPU Victory");
-
-    //         endgame_display.style.display = "flex";
-    //         endgame_display.innerHTML = "GAME OVER";
-    //     }
-    // }
-    // // [ Loop ] : Diagonals
-    // for(let i = 0; i < diagonals.length; i++){
-    //     if(allocatorA.includes(diagonals[i])){
-    //         // window.alert("STREAK DETECTED");
-    //         console.log("Player Victory");
-
-    //         endgame_display.style.display = "flex";
-    //         endgame_display.innerHTML = "GAME OVER";
-    //     }
-    //     if(allocatorB.includes(rows[i])){
-    //         // window.alert("STREAK DETECTED");
-    //         console.log("CPU Victory");
-
-    //         endgame_display.style.display = "flex";
-    //         endgame_display.innerHTML = "GAME OVER";
-    //     }        
-    // }
-
     // Consecutive Counter Check         // [ SECOND IMPLEMENTATION ]
     let first_column = [];
     let second_column = [];
@@ -222,19 +139,7 @@ function streakCheck(){
             endgame_display.style.display = "flex";
             endgame_display.innerHTML = "GAME OVER";
         }
-        // [ Debug ]
-        // console.log(sequence);
-        // console.log(`streak_detected : ${streak_detected}`);
     });
-    
-    // [ Debug ]
-    // console.log(`subArray A : ${subArrayA}`);
-    // console.log(`subArray B : ${subArrayB}`);
-    // console.log(subArrayA);
-    // console.log(subArrayB);
-    // console.log(allocatorA);
-    // console.log(allocatorB);
-    // console.log(sequences);
 }
 
 // [ Functions ] : Support 
@@ -245,32 +150,12 @@ function populate(array, start, stop, amount){
 }
 function convert(array){
     let temp = array.toString().split(",").join("");
-    // console.log(temp);
     return temp;
 }
 
 // [ Functions ] : 
 function reset(){}
 function update_grid(grid_box){
-    // if(!streak_detected){
-    //     // grid_box.addEventListener("click", () => {
-    //     //     if((space_count > 0 && grid_box.innerHTML === '')){
-    //     //         grid_box.innerHTML = player_shape;
-    //     //         reference_list[grid_box.id] = player_shape;
-    //     //         player_boxes.push(grid_box.id);
-    //     //         space_count--;
-    //     //         cpuAttempt();
-    //     //         streakCheck();
-
-    //     //         if (space_count < 1 || streak_detected){
-    //     //             window.alert("Game Over");
-    //     //         }
-    //     //     }
-    //     // })
-    //     grid_box.addEventListener("click", () => mark_grid(grid_box));
-    // } else if(streak_detected){
-    //     grid_box.removeEventListener("click", () => mark_grid(grid_box));
-    // }
     grid_box.addEventListener("click", () => {
         if (!streak_detected){
             mark_grid(grid_box);
@@ -285,10 +170,6 @@ function mark_grid(grid_box){
         space_count--;
         cpuAttempt();
         streakCheck();
-
-        // if (space_count < 1 || streak_detected){
-        //     window.alert("Game Over");
-        // }
     } else {
         return;
     }
