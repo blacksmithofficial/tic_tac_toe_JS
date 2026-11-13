@@ -77,15 +77,17 @@ h4 {
 #username{
     text-align: center;
 }
-#turn_display{
+#endgame_display{
     display: flex;
     position: relative;
-    left: 20vw;
-    width: 590px;
-    height: 90px;
+    left: 28.5vw;
+    width: 40vw;
+    height: 60px;
 
     text-align: center;
     align-items: center;
+    justify-content: center;
 
     border: 1px solid black;
+    border-radius: 5px;
 }
