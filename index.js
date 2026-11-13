@@ -22,7 +22,7 @@ const cpu_shapebox = document.getElementById("cpu_shapebox");
 const grid = document.getElementById("grid");
 const game_display = document.getElementById("game_display");
 const grid_boxes = document.querySelectorAll(".grid_box");
-const endgame_display = document.getElementById("victory_display");
+const endgame_display = document.getElementById("endgame_display");
 
 // [ Variables ] : ( Game-Start )
 const shapes = ['O', "X"];
@@ -168,8 +168,8 @@ function streakCheck(arrayA, arrayB){
             window.alert("STREAK DETECTED");
             console.log("STREAK DETECTED");
 
-            endgame_display.innerHTML = "GAME OVER";
             endgame_display.style.display = "flex";
+            endgame_display.innerHTML = "GAME OVER";
         }
     }
     // [ Loop ] : Columns
@@ -178,8 +178,8 @@ function streakCheck(arrayA, arrayB){
             window.alert("STREAK DETECTED");
             console.log("STREAK DETECTED");
 
-            endgame_display.innerHTML = "GAME OVER";
             endgame_display.style.display = "flex";
+            endgame_display.innerHTML = "GAME OVER";
         }
     }
     // [ Loop ] : Diagonals
@@ -188,8 +188,8 @@ function streakCheck(arrayA, arrayB){
             window.alert("STREAK DETECTED");
             console.log("STREAK DETECTED");
 
-            endgame_display.innerHTML = "GAME OVER";
             endgame_display.style.display = "flex";
+            endgame_display.innerHTML = "GAME OVER";
         }
     }
 
