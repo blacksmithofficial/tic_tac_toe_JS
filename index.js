@@ -34,6 +34,7 @@ let player_turn, cpu_turn;
 let box_count = 9;
 let space_count = 9;
 let grid_full = false;
+let streak_detected = false;
 let reference_list = ['', '', '', '', '', '', '', '', ''];
 let cpu_boxes = [];
 let player_boxes = [];
@@ -77,28 +78,7 @@ cross_option.addEventListener("click", () => {
 })
 
 // [ System ] : ( Game Board EventListeners )
-grid_boxes.forEach((grid_box) => {
-    grid_box.addEventListener("click", () => {
-        if(space_count > 0 && grid_box.innerHTML === ''){
-            grid_box.innerHTML = player_shape;
-            reference_list[grid_box.id] = player_shape;
-            player_boxes.push(grid_box.id);
-            space_count--;
-            cpuAttempt();
-            streakCheck(player_boxes, cpu_boxes);
-
-            if (space_count < 1){
-                window.alert("Game Over");
-            }
-
-            // [ Debug ]
-            // console.log(`reference_list : ${reference_list}`);
-            // console.log(`${grid_box.id}`);
-            // console.log(`space_count : ${space_count}`);
-            // console.log(`player attempts : ${player_boxes}`)
-        }
-    })
-})
+grid_boxes.forEach((grid_box) => update_grid(grid_box));
 
 // [ Functions ] : ( Grid ) 
 function cpuAttempt(){
@@ -122,82 +102,194 @@ function cpuAttempt(){
     // [ Debug ]
     // console.log(`cpu attempts : ${cpu_boxes}`);
     // console.log(`player attempts : ${player_boxes}`);
-
-
 }
+function streakCheck(){
+    // // [ Arrays ] : Strings (Sequences) 3!       [ FIRST IMPLEMENTATION ]
+    // rows = ["012","021","102","120","210","201", 
+    //         "345","354","435","453","534","543", 
+    //         "678","687","768","786","867","876"];
+    // columns = ["036","063","306","360","603","630",
+    //             "147","174","417","471","714","741",
+    //             "258","285","528","582","825","852"];
+    // diagonals = ["048","084","408","480","804","840",
+    //              "246","264","426","462","624","642"];
 
-function streakCheck(arrayA, arrayB){
-    // consecutive count x
-    // consecutive count o
-    /** need 3 in a row */
-    /** increments when consecutive repeats */
+    // // [ Arrays ] : Convert
+    // let subArrayA = arrayA.toString().split(",");
+    // let subArrayB = arrayB.toString().split(",");
 
-    // [ row ] [ column ] [ diagonal ]
-    // 3 rows
-    // 3 columns
-    // 2 diagonals
+    // let allocatorA = "";
+    // let allocatorB = "";
+    // let cross_count = 0;
+    // let circle_count = 0;
 
-    // [ Arrays ] : Strings (Sequences) 3!
-    rows = ["012","021","102","120","210","201", 
-            "345","354","435","453","534","543", 
-            "678","687","768","786","867","876"];
-    columns = ["036","063","306","360","603","630",
-                "147","174","417","471","714","741",
-                "258","285","528","582","825","852"];
-    diagonals = ["048","084","408","480","804","840",
-                 "246","264","426","462","624","642"];
+    // // [ Loop ] : Allocate subArrays
+    // for(let i = 0; i < subArrayA.length; i++){
+    //     allocatorA += subArrayA[i];
+    // }
+    // for(let i = 0; i < subArrayB.length; i++){
+    //     allocatorB += subArrayB[i];
+    // }
 
-    // [ Arrays ] : Convert
-    let subArrayA = arrayA.toString().split(",");
-    let subArrayB = arrayB.toString().split(",");
+    // // [ Loop ] : Rows
+    // for(let i = 0; i < rows.length; i++){
+    //     if(allocatorA.includes(rows[i])){
+    //         // window.alert("STREAK DETECTED");
+    //         console.log("STREAK DETECTED");
 
-    let allocatorA = "";
-    let allocatorB = "";
+    //         endgame_display.style.display = "flex";
+    //         endgame_display.innerHTML = "GAME OVER";
+    //     }
+    //     if(allocatorB.includes(rows[i])){
+    //         // window.alert("STREAK DETECTED");
+    //         console.log("STREAK DETECTED");
 
-    // [ Loop ] : Allocate subArrays
-    for(let i = 0; i < subArrayA.length; i++){
-        allocatorA += subArrayA[i];
-    }
-    for(let i = 0; i < subArrayB.length; i++){
-        allocatorB += subArrayB[i];
-    }
+    //         endgame_display.style.display = "flex";
+    //         endgame_display.innerHTML = "GAME OVER";
+    //     }        
+    // }
+    // // [ Loop ] : Columns
+    // for(let i = 0; i < columns.length; i++){
+    //     if(allocatorA.includes(columns[i])){
+    //         // window.alert("STREAK DETECTED");
+    //         console.log("Player Victory");
 
-    // [ Loop ] : Rows
-    for(let i = 0; i < rows.length; i++){
-        if(allocatorA.includes(rows[i]) || allocatorB.includes(rows[i])){
-            window.alert("STREAK DETECTED");
-            console.log("STREAK DETECTED");
+    //         endgame_display.style.display = "flex";
+    //         endgame_display.innerHTML = "GAME OVER";
+    //     }
+    //     if(allocatorB.includes(rows[i])){
+    //         // window.alert("STREAK DETECTED");
+    //         console.log("CPU Victory");
+
+    //         endgame_display.style.display = "flex";
+    //         endgame_display.innerHTML = "GAME OVER";
+    //     }
+    // }
+    // // [ Loop ] : Diagonals
+    // for(let i = 0; i < diagonals.length; i++){
+    //     if(allocatorA.includes(diagonals[i])){
+    //         // window.alert("STREAK DETECTED");
+    //         console.log("Player Victory");
+
+    //         endgame_display.style.display = "flex";
+    //         endgame_display.innerHTML = "GAME OVER";
+    //     }
+    //     if(allocatorB.includes(rows[i])){
+    //         // window.alert("STREAK DETECTED");
+    //         console.log("CPU Victory");
+
+    //         endgame_display.style.display = "flex";
+    //         endgame_display.innerHTML = "GAME OVER";
+    //     }        
+    // }
+
+    // Consecutive Counter Check         // [ SECOND IMPLEMENTATION ]
+    let first_column = [];
+    let second_column = [];
+    let third_column = [];
+    let first_row = [];
+    let second_row = [];
+    let third_row = [];
+    let first_diagonal = [];
+    let second_diagonal = [];
+
+    // [ Document ] : Actively Record Current Grid Changes
+    // [ Loop ] : ( Record Column Changes)
+    populate(first_column, 0, 9, 3);
+    populate(second_column, 1, 9, 3);
+    populate(third_column, 2, 9, 3);
+    // [ Loop ] : ( Record Row Changes )
+    populate(first_row, 0, 3, 1);
+    populate(first_row, 3, 6, 1);
+    populate(first_row, 6, 9, 1);
+    // [ Loop ] : ( Record Diagonal Changes )
+    populate(first_diagonal, 0, 9, 4);
+    populate(second_diagonal, 2, 7, 2);
+
+    // [ Compare ] : Find Streak ( End Game Condition )
+    let cross_streak = "XXX";
+    let circle_streak = "OOO";
+    let sequences = [ first_column, second_column, third_column,
+                      first_row, second_row, third_row,
+                      first_diagonal, second_diagonal ];
+    sequences.forEach((sequence) => {
+        sequence = convert(sequence);
+        // [ Condition ] : Streak Match
+        if(sequence === cross_streak || sequence === circle_streak){
+            console.log(" !! Streak Detected !! ");
+            streak_detected = true;
 
             endgame_display.style.display = "flex";
             endgame_display.innerHTML = "GAME OVER";
         }
-    }
-    // [ Loop ] : Columns
-    for(let i = 0; i < columns.length; i++){
-        if(allocatorA.includes(columns[i]) || allocatorB.includes(columns[i])){
-            window.alert("STREAK DETECTED");
-            console.log("STREAK DETECTED");
-
-            endgame_display.style.display = "flex";
-            endgame_display.innerHTML = "GAME OVER";
-        }
-    }
-    // [ Loop ] : Diagonals
-    for(let i = 0; i < diagonals.length; i++){
-        if(allocatorA.includes(diagonals[i]) || allocatorB.includes(diagonals[i])){
-            window.alert("STREAK DETECTED");
-            console.log("STREAK DETECTED");
-
-            endgame_display.style.display = "flex";
-            endgame_display.innerHTML = "GAME OVER";
-        }
-    }
-
+        // [ Debug ]
+        // console.log(sequence);
+        // console.log(`streak_detected : ${streak_detected}`);
+    });
+    
     // [ Debug ]
     // console.log(`subArray A : ${subArrayA}`);
     // console.log(`subArray B : ${subArrayB}`);
     // console.log(subArrayA);
     // console.log(subArrayB);
-    console.log(allocatorA);
-    console.log(allocatorB);
+    // console.log(allocatorA);
+    // console.log(allocatorB);
+    // console.log(sequences);
+}
+
+// [ Functions ] : Support 
+function populate(array, start, stop, amount){
+    for (let i = start; i < stop; i+=amount){
+        array.push(reference_list[i]);
+    }
+}
+function convert(array){
+    let temp = array.toString().split(",").join("");
+    // console.log(temp);
+    return temp;
+}
+
+// [ Functions ] : 
+function reset(){}
+function update_grid(grid_box){
+    // if(!streak_detected){
+    //     // grid_box.addEventListener("click", () => {
+    //     //     if((space_count > 0 && grid_box.innerHTML === '')){
+    //     //         grid_box.innerHTML = player_shape;
+    //     //         reference_list[grid_box.id] = player_shape;
+    //     //         player_boxes.push(grid_box.id);
+    //     //         space_count--;
+    //     //         cpuAttempt();
+    //     //         streakCheck();
+
+    //     //         if (space_count < 1 || streak_detected){
+    //     //             window.alert("Game Over");
+    //     //         }
+    //     //     }
+    //     // })
+    //     grid_box.addEventListener("click", () => mark_grid(grid_box));
+    // } else if(streak_detected){
+    //     grid_box.removeEventListener("click", () => mark_grid(grid_box));
+    // }
+    grid_box.addEventListener("click", () => {
+        if (!streak_detected){
+            mark_grid(grid_box);
+        }
+    })
+}
+function mark_grid(grid_box){
+    if((space_count > 0 && grid_box.innerHTML === '')){
+        grid_box.innerHTML = player_shape;
+        reference_list[grid_box.id] = player_shape;
+        player_boxes.push(grid_box.id);
+        space_count--;
+        cpuAttempt();
+        streakCheck();
+
+        // if (space_count < 1 || streak_detected){
+        //     window.alert("Game Over");
+        // }
+    } else {
+        return;
+    }
 }
