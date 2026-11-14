@@ -12,20 +12,20 @@
         <h1>Tic Tac Toe</h1>
 
         <div id="mode_select">
-            <button id="start_button">Start Game</button>
+            <button id="start_button" class="menu_button">Start Game</button>
         </div>
 
         <div id="set_username" style="display: none;">
             <label for="">Enter Username</label><br>
             <input id="username" type="text" placeholder="abc123"><br><br>
-            <button id="continue_button">Continue</button>
+            <button id="continue_button" class="menu_button">Continue</button>
         </div>
 
         <div id="shape_select" style="display: none;">
             <label for="">Select Shape</label><br><br>
             <div display="flex">
-                <button id="circle_option">O</button>
-                <button id="cross_option">X</button>
+                <button id="circle_option" class="menu_button">O</button>
+                <button id="cross_option" class="menu_button">X</button>
             </div>
         </div>
         <p>Developed By : Blacksmith</p>
@@ -66,6 +66,20 @@
         <div id="endgame_display" style="display: none;"></div>
      </div>
 
+    <!-- End Game Menu -->
+     <div id="end_menu" style="display: none;">
+        <h1>Tic Tac Toe</h1>
+        <br>
+        <div>
+            <h3>Play Again ?</h3>
+            <br>
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <button id="yes"  class="menu_button">Yes</button>
+                <button id="no" class="menu_button">No</button>
+            </div>
+        </div>
+        <p>Developed By : Blacksmith</p>
+     </div>
     <script src="index.js"></script>
 </body>
 </html>

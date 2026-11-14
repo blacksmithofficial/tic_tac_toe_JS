@@ -5,6 +5,9 @@ const start_menu = document.getElementById("start_menu");
 const mode_select = document.getElementById("mode_select");
 const set_username = document.getElementById("set_username");
 const shape_select = document.getElementById("shape_select");
+const end_menu = document.getElementById("end_menu");
+const yes = document.getElementById("yes");
+const no = document.getElementById("no");
 
 // [ Variables ] : ( Setup / Menu ) Phase 2
 const start_button = document.getElementById("start_button");
@@ -27,7 +30,7 @@ const endgame_display = document.getElementById("endgame_display");
 // [ Variables ] : ( Game-Start )
 const shapes = ['O', "X"];
 let player_username, player_shape, cpu_shape;
-let game_count = 0;
+let game_count = 1;
 let player_turn, cpu_turn;
 
 // [ Variables ] : Grid ( 3x3 ) 
@@ -41,10 +44,12 @@ let player_boxes = [];
 
 
 // [ System ] :  ( Start Menu EventListeners )
+// console.log(`game_count : ${game_count}`);
 start_button.addEventListener("click", () => {
-    game_count++;
     mode_select.style.display = "none";
     set_username.style.display = "block"; 
+
+    console.log(`game_count : ${game_count}`);
 })
 continue_button.addEventListener("click", () => {
     player_username = username.value;
@@ -60,7 +65,7 @@ circle_option.addEventListener("click", () => {
     game_board.style.display = "block";
     player_shapebox.innerHTML = player_shape;
     cpu_shapebox.innerHTML = cpu_shape;
-    game_display.innerHTML = `Game ${game_count}`;
+    // game_count++;
     
     console.log(`Player Shape : ${player_shape}`);
 
@@ -72,12 +77,38 @@ cross_option.addEventListener("click", () => {
     game_board.style.display = "block";
     player_shapebox.innerHTML = player_shape;
     cpu_shapebox.innerHTML = cpu_shape;
-    game_display.innerHTML = `Game ${game_count}`;
+    // game_count++;
 
     console.log(`Player Shape : ${player_shape}`);
 })
+// [ System ] : (End Menu EventListeners )
+yes.addEventListener("click", () => {
+    // [ Clear Board ]
+    clear_board(grid_boxes);
+    game_count++;
+    end_menu.style.display = "none";
+    endgame_display.style.display = "none";
+
+    console.log(game_count);
+    game_display.innerHTML = `Game ${game_count}`;
+})
+no.addEventListener("click", () => {
+    // [ Clear Board ]
+    clear_board(grid_boxes);
+    game_count = 0;
+
+    end_menu.style.display = "none";
+    game_board.style.display = "none";
+    start_menu.style.display = "block";
+    mode_select.style.display = "block";
+    set_username.style.display = "none";
+    shape_select.style.display = "none";
+})
+
 
 // [ System ] : ( Game Board EventListeners )
+game_display.innerHTML = `Game ${game_count}`;
+console.log(`game_count : ${game_count}`);
 grid_boxes.forEach((grid_box) => update_grid(grid_box));
 
 // [ Functions ] : ( Grid ) 
@@ -100,15 +131,10 @@ function cpuAttempt(){
     }
 }
 function streakCheck(){
-    // Consecutive Counter Check         // [ SECOND IMPLEMENTATION ]
-    let first_column = [];
-    let second_column = [];
-    let third_column = [];
-    let first_row = [];
-    let second_row = [];
-    let third_row = [];
-    let first_diagonal = [];
-    let second_diagonal = [];
+    // ( Consecutive Counter Check )                                [ SECOND IMPLEMENTATION ]
+    let first_column = [], second_column = [], third_column = [];
+    let first_row = [], second_row = [], third_row = [];
+    let first_diagonal = [], second_diagonal = [];
 
     // [ Document ] : Actively Record Current Grid Changes
     // [ Loop ] : ( Record Column Changes)
@@ -117,8 +143,8 @@ function streakCheck(){
     populate(third_column, 2, 9, 3);
     // [ Loop ] : ( Record Row Changes )
     populate(first_row, 0, 3, 1);
-    populate(first_row, 3, 6, 1);
-    populate(first_row, 6, 9, 1);
+    populate(second_row, 3, 6, 1);
+    populate(third_row, 6, 9, 1);
     // [ Loop ] : ( Record Diagonal Changes )
     populate(first_diagonal, 0, 9, 4);
     populate(second_diagonal, 2, 7, 2);
@@ -138,6 +164,7 @@ function streakCheck(){
 
             endgame_display.style.display = "flex";
             endgame_display.innerHTML = "GAME OVER";
+            reset();
         }
     });
 }
@@ -152,9 +179,28 @@ function convert(array){
     let temp = array.toString().split(",").join("");
     return temp;
 }
+function clear_board(collection){
+    collection.forEach((grid_box) => {
+        grid_box.innerHTML = '';
+    })
+    grid_full = false;
+    streak_detected = false;
+    reference_list = ['', '', '', '', '', '', '', '', ''];
+    cpu_boxes = [];
+    player_boxes = [];
+    space_count = 9;
+}
 
 // [ Functions ] : 
-function reset(){}
+function reset(){
+    // [ Trigger ] : Prompt
+    end_menu.style.display = "block";
+    end_menu.style.position = "absolute";
+
+    // [ Condition ] : Continue
+
+    // [ Condition ] : Exit
+}
 function update_grid(grid_box){
     grid_box.addEventListener("click", () => {
         if (!streak_detected){
