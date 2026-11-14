@@ -95,14 +95,16 @@ yes.addEventListener("click", () => {
 no.addEventListener("click", () => {
     // [ Clear Board ]
     clear_board(grid_boxes);
-    game_count = 0;
+    game_count = 1;
 
     end_menu.style.display = "none";
+    endgame_display.style.display = "none";
     game_board.style.display = "none";
     start_menu.style.display = "block";
     mode_select.style.display = "block";
     set_username.style.display = "none";
     shape_select.style.display = "none";
+    game_display.innerHTML = `Game ${game_count}`;
 })
 
 
@@ -155,6 +157,11 @@ function streakCheck(){
     let sequences = [ first_column, second_column, third_column,
                       first_row, second_row, third_row,
                       first_diagonal, second_diagonal ];
+    let full_count = 0;
+    // [ Conditional ]
+    if(full_count === sequences.length){
+        reset();
+    }
     sequences.forEach((sequence) => {
         sequence = convert(sequence);
         // [ Condition ] : Streak Match
@@ -162,10 +169,12 @@ function streakCheck(){
             console.log(" !! Streak Detected !! ");
             streak_detected = true;
 
-            endgame_display.style.display = "flex";
-            endgame_display.innerHTML = "GAME OVER";
             reset();
         }
+        if(sequence.length === 3){
+            full_count++;
+        }
+
     });
 }
 
@@ -196,10 +205,8 @@ function reset(){
     // [ Trigger ] : Prompt
     end_menu.style.display = "block";
     end_menu.style.position = "absolute";
-
-    // [ Condition ] : Continue
-
-    // [ Condition ] : Exit
+    endgame_display.style.display = "flex";
+    endgame_display.innerHTML = "GAME OVER";
 }
 function update_grid(grid_box){
     grid_box.addEventListener("click", () => {
